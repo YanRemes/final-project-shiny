@@ -3,6 +3,13 @@ library(ggplot2)
 library(dplyr)
 
 data <- read.csv('~/Desktop/info201/final project/Data/survey.csv')
+data <- data %>% filter(grepl('2014', data$Timestamp))
+data$Gender <- toupper(data$Gender)
+data$Gender[grep("\\bM\\b",data$Gender)] <- 'MALE'
+data$Gender[grep("\\bF\\b",data$Gender)] <- 'FEMALE'
+data$Gender[grep("\\bWOMAN\\b",data$Gender)] <- 'FEMALE'
+keepGender <- c("MALE", "FEMALE")
+data <- data[data$Gender %in% keepGender, ]
 
 page_one <- tabPanel(
   "Introduction",
@@ -28,8 +35,8 @@ page_two <- tabPanel(
       radioButtons(
         inputId = "radio",
         label = "Pick a gender",
-        choices = list("Male" = "Male", "Female" = "Female"),
-        selected = "Male"),
+        choices = list("MALE" = "MALE", "FEMALE" = "FEMALE"),
+        selected = "MALE"),
     ),
     mainPanel(
       ui <- fluidPage(
