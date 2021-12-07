@@ -86,7 +86,7 @@ server <- function(input, output) {
   output$bar <- renderPlot({
     ggplot(new_data_employee(), aes(x = no_employees)) +
       geom_bar(aes(fill = state)) + facet_grid(. ~ state) + 
-      theme(axis.text.x=element_text(angle=90, hjust=1)) + labs(title="Mental health Issues count per company size", y="Mental Health Issues count", x="Number of Employees in Company")
+      theme(axis.text.x=element_text(angle=90, hjust=1)) + labs(y="Mental Health Issues count", x="Number of Employees in Company")
   })
   
 }
