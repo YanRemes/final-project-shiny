@@ -11,6 +11,11 @@ data$Gender[grep("\\bWOMAN\\b",data$Gender)] <- 'FEMALE'
 keepGender <- c("MALE", "FEMALE")
 data <- data[data$Gender %in% keepGender, ]
 
+data_2 <- data %>%
+  filter(Age <= 100)%>%
+  group_by(state)%>%
+  group_by(no_employees)
+
 page_one <- tabPanel(
   "Introduction",
   mainPanel(
@@ -47,9 +52,73 @@ page_two <- tabPanel(
   )
 )
 
+page_three <- tabPanel(
+  "Age Distribution",
+  
+  sidebarLayout(
+    sidebarPanel(
+      
+      radioButtons(
+        inputId = "treatment",
+        label = "Did the surveyor receive treatment or not: ",
+        choices = list("Yes" = "Yes", "No" = "No"),
+        selected = "Yes"
+      ),
+      
+      
+      selectInput(
+        inputId = "size",
+        label = "Select the size of the company: ",
+        choices = data_2$no_employees,
+        selected = "1-5"),
+    ),
+    
+    mainPanel(  
+      ui <- fluidPage(
+        
+        h1("Age distribution of mental health in work place"),
+        plotOutput("line"),
+        
+      )   
+    )
+  )
+)
+
+page_four <- tabPanel(
+  "Consequences of Mental Health",
+  
+  sidebarLayout(
+    sidebarPanel(
+      
+      
+      checkboxGroupInput(
+        inputId = "stateChoice", 
+        label = h3("States"), 
+        choices = list("CA" = "CA", "IN" = "IN", "MA" = "MA", "NY" = "NY", "OH" = "OH", "OR" = "OR", "TN" = "TN", "TX" = "TX", "WA" = "WA"),
+        selected = "WA"
+      ),
+      selectInput(
+        inputId = "employees",
+        label = "Select the size of the company: ",
+        choices = df$no_employees,
+        selected = "1-5"),
+    ),
+    
+    mainPanel(  
+      ui <- fluidPage(
+        
+        h1("Mental Health and Company Size"),
+        plotOutput("bar")
+        
+      )   
+    )
+  )
+)
 
 ui <- navbarPage(
-  "survey Data Exploration",
+  "Mental health Survey Data Exploration",
   page_one,
-  page_two
+  page_two,
+  page_three,
+  page_four
 )
